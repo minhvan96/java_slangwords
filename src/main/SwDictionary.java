@@ -21,6 +21,8 @@ public class SwDictionary {
             while (studentReader.hasNextLine()) {
                 String line = studentReader.nextLine();
                 String[] splitedLine = line.split("`");
+                if(splitedLine.length != 2)
+                    continue;
                 String word = splitedLine[0];
                 String meaning = splitedLine[1];
                 SlangWord slangWord = new SlangWord(word, meaning);
@@ -36,4 +38,7 @@ public class SwDictionary {
         return dic.stream().filter(x -> x.getWord() == word).toList();
     }
 
+    public Collection<SlangWord> SearchByMeaning(String definition){
+        return dic.stream().filter(x -> x.getMeaning() == definition).toList();
+    }
 }

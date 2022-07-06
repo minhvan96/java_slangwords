@@ -1,6 +1,9 @@
 package main;
 
 
+import main.Entity.SlangWord;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -41,12 +44,16 @@ public class SlangWords {
         System.out.println("Select option");
         Scanner optionScanner = new Scanner(System.in);
         while (optionScanner.hasNextLine()){
+
             int option = Integer.parseInt(optionScanner.nextLine());
             switch (option){
                 case 1:
+                    System.out.print("Enter word: ");
                     Scanner searchKeyWordScanner = new Scanner(System.in);
                     String searchKeyWord = searchKeyWordScanner.nextLine();
-
+                    ArrayList<SlangWord> words = (ArrayList<SlangWord>) dic.SearchByWord(searchKeyWord);
+                    System.out.println(String.format("List Meanings"));
+                    words.forEach(word -> System.out.println(word.getMeaning()));
             }
         }
 
