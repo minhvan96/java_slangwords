@@ -32,4 +32,8 @@ public class SwDictionary {
         }
     }
 
+    public Collection<SlangWord> SearchByWord(String word){
+        return dic.stream().filter(x -> x.getWord() == word).toList();
+    }
+
 }
