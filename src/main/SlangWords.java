@@ -41,20 +41,32 @@ public class SlangWords {
         System.out.println();
 
 
-        System.out.println("Select option");
+        System.out.print("Select option: ");
         Scanner optionScanner = new Scanner(System.in);
         while (optionScanner.hasNextLine()){
-
+            ArrayList<SlangWord> words;
             int option = Integer.parseInt(optionScanner.nextLine());
             switch (option){
                 case 1:
                     System.out.print("Enter word: ");
                     Scanner searchKeyWordScanner = new Scanner(System.in);
                     String searchKeyWord = searchKeyWordScanner.nextLine();
-                    ArrayList<SlangWord> words = (ArrayList<SlangWord>) dic.SearchByWord(searchKeyWord);
+                    words = (ArrayList<SlangWord>) dic.SearchByWord(searchKeyWord);
                     System.out.println(String.format("List Meanings"));
                     words.forEach(word -> System.out.println(word.getMeaning()));
+
+                case 2:
+                    System.out.print("Enter definition: ");
+                    Scanner searchDefinitionScanner = new Scanner(System.in);
+                    String searchDefinition = searchDefinitionScanner.nextLine();
+                    words = (ArrayList<SlangWord>) dic.SearchByMeaning(searchDefinition);
+                    System.out.println(String.format("List Word"));
+                    words.forEach(word -> System.out.println(word.getMeaning()));
+
+                default:
+                    break;
             }
+
         }
 
         dic.read();

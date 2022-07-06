@@ -5,6 +5,8 @@ import main.Entity.SlangWord;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class SwDictionary {
     private ArrayList<SlangWord> dic;
@@ -33,12 +35,15 @@ public class SwDictionary {
             throw new RuntimeException(e);
         }
     }
+    public Collection<SlangWord> SearchByWord(String searchKeyWord) {
+        Predicate<SlangWord> streamsPredicate = word -> searchKeyWord.equalsIgnoreCase(word.getWord());
 
-    public Collection<SlangWord> SearchByWord(String word){
-        return dic.stream().filter(x -> x.getWord() == word).toList();
+        return dic.stream()
+                .filter(streamsPredicate)
+                .collect(Collectors.toList());
     }
 
     public Collection<SlangWord> SearchByMeaning(String definition){
-        return dic.stream().filter(x -> x.getMeaning() == definition).toList();
+        return dic.stream().filter(x -> x.getMeaning().contains(definition)).toList();
     }
 }
