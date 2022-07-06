@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3bc34ce6-5d9e-4ad9-a811-b8879751fab1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/Entity/SlangWord.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/Entity/slang.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/SlangWords.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/SwDictionary.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/SwDictionary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/SwDictionary.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +73,7 @@
       <updated>1656956546339</updated>
       <workItem from="1656956549154" duration="1201000" />
       <workItem from="1657040604643" duration="396000" />
-      <workItem from="1657041084492" duration="2058000" />
+      <workItem from="1657041084492" duration="3277000" />
     </task>
     <servers />
   </component>
