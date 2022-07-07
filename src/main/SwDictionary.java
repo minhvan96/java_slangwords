@@ -46,4 +46,6 @@ public class SwDictionary {
     public Collection<SlangWord> SearchByMeaning(String definition){
         return dic.stream().filter(x -> x.getMeaning().contains(definition)).toList();
     }
+
+    public Collection
 }
