@@ -4,8 +4,10 @@ package main;
 import main.entity.SearchHistoryEntity;
 import main.entity.SlangWordEntity;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class SlangWords {
 
@@ -42,7 +44,7 @@ public class SlangWords {
             SlangWordEntity[] words;
             int option = Integer.parseInt(optionScanner.nextLine());
             switch (option) {
-                case 1:
+                case 1: {
                     System.out.print("Enter word: ");
                     Scanner searchKeyWordScanner = new Scanner(System.in);
                     String searchKeyWord = searchKeyWordScanner.nextLine();
@@ -52,7 +54,9 @@ public class SlangWords {
                         System.out.println(slangWord.getMeaning());
                     }
                     break;
-                case 2:
+                }
+
+                case 2: {
                     System.out.print("Enter definition: ");
                     Scanner searchDefinitionScanner = new Scanner(System.in);
                     String searchDefinition = searchDefinitionScanner.nextLine();
@@ -63,15 +67,16 @@ public class SlangWords {
                         System.out.println(slangWord.getMeaning());
                     }
                     break;
-                case 3:
+                }
+
+                case 3: {
                     System.out.println("Search history");
                     ArrayList<SearchHistoryEntity> records = (ArrayList<SearchHistoryEntity>) dic.getSearchHistory();
-                    records.forEach(x -> System.out.println(x.getSearchType() == 1
-                            ? "Search by word with keyword: " + x.getSearchKeyWord()
-                            : "Search by definition: " + x.getSearchKeyWord()));
+                    records.forEach(x -> System.out.println(x.getSearchType() == 1 ? "Search by word with keyword: " + x.getSearchKeyWord() : "Search by definition: " + x.getSearchKeyWord()));
                     break;
+                }
 
-                case 4:
+                case 4: {
                     System.out.println("Insert new slang word");
                     System.out.print("Enter the word: ");
                     Scanner newWordScanner = new Scanner(System.in);
@@ -83,7 +88,9 @@ public class SlangWords {
                     dic.insertRecordToDictionary(newWord, newDefinition);
                     System.out.println("New slang word inserted to the dictionary");
                     break;
-                case 5:
+                }
+
+                case 5: {
                     System.out.println("Edit slang word");
                     System.out.print("Enter word: ");
                     Scanner editingWordScanner = new Scanner(System.in);
@@ -95,7 +102,10 @@ public class SlangWords {
                     dic.editRecord(editingWord, editingWordNewDefinition);
                     System.out.println("Word edited successfully");
                     break;
+                }
+
                 case 6:
+                {
                     System.out.println("Delete a slang word");
                     System.out.print("Enter word: ");
                     Scanner deletingWordScanner = new Scanner(System.in);
@@ -103,15 +113,45 @@ public class SlangWords {
                     dic.removeRecord(deletingWord);
                     System.out.println("Word deleted successfully");
                     break;
+                }
+
+                case 7:
+                {
+                    System.out.println("Reset dictionary");
+                    dic.reset();
+
+                    System.out.println("Dictionary reset successfully");
+                    break;
+                }
+
+                case 8:
+                {
+                    break;
+                }
+
+                case 9:
+                {
+                    break;
+                }
+
+                case 10:
+                {
+                    break;
+                }
+
+
                 default:
                     break;
             }
 
             System.out.println("Enter q to quit");
-
+            Scanner quitScanner = new Scanner(System.in);
+            if (optionScanner.nextLine().equalsIgnoreCase("q")) {
+                System.out.println("Good bye");
+                return;
+            }
 
         }
 
-        dic.readDictionary();
     }
 }

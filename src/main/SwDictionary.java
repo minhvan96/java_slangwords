@@ -4,6 +4,7 @@ import main.entity.SearchHistoryEntity;
 import main.entity.SlangWordEntity;
 
 import java.io.*;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
@@ -20,6 +21,7 @@ public class SwDictionary {
     private final String slangFilePath = this.getClass().getResource("resources/slang.txt").getPath();
     private final String originalSlangFilePath = this.getClass().getResource("resources/original_slang").getPath();
     private final String searchHistoryFilePath = this.getClass().getResource("resources/search_history").getPath();
+
     public SwDictionary() {
         dic = (ArrayList<SlangWordEntity>) readDictionary();
     }
@@ -33,8 +35,7 @@ public class SwDictionary {
             while (studentReader.hasNextLine()) {
                 String line = studentReader.nextLine();
                 String[] splitedLine = line.split("`");
-                if (splitedLine.length != 2)
-                    continue;
+                if (splitedLine.length != 2) continue;
                 String word = splitedLine[0];
                 String meaning = splitedLine[1];
                 SlangWordEntity slangWordEntity = new SlangWordEntity(word, meaning);
@@ -45,17 +46,18 @@ public class SwDictionary {
             throw new RuntimeException(e);
         }
     }
-    public void insertRecordToDictionary(String word, String meaning){
+
+    public void insertRecordToDictionary(String word, String meaning) {
         try {
             Writer output = new BufferedWriter(new FileWriter(slangFilePath, true));
-            output.append(word + "`" + meaning+ '\n');
+            output.append(word + "`" + meaning + '\n');
             output.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void editRecord(String word, String newDefinition){
+    public void editRecord(String word, String newDefinition) {
         File file = new File(slangFilePath);
 
         List<String> fileContent = null;
@@ -63,8 +65,7 @@ public class SwDictionary {
             fileContent = new ArrayList<>(Files.readAllLines(file.toPath(), StandardCharsets.UTF_8));
             for (int i = 0; i < fileContent.size(); i++) {
                 String[] splitedLine = fileContent.get(i).split("`");
-                if (splitedLine.length != 2)
-                    continue;
+                if (splitedLine.length != 2) continue;
 
                 if (splitedLine[0].equalsIgnoreCase(word)) {
                     fileContent.set(i, word + "`" + newDefinition);
@@ -76,35 +77,45 @@ public class SwDictionary {
             throw new RuntimeException(e);
         }
     }
-    public void removeRecord(String word)  {
+
+    public void removeRecord(String word) {
         File file = new File(slangFilePath);
         List<String> out = null;
         try {
-            out = Files.lines(file.toPath())
-                    .filter(line -> !line.split("`", 2)[0].equalsIgnoreCase(word) && !line.isEmpty())
-                    .collect(Collectors.toList());
+            out = Files.lines(file.toPath()).filter(line -> !line.split("`", 2)[0].equalsIgnoreCase(word) && !line.isEmpty()).collect(Collectors.toList());
             Files.write(file.toPath(), out, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
+    public void reset(){
+        File original = new File(originalSlangFilePath);
+        File slang = new File(slangFilePath);
+        try {
+            FileChannel src = new FileInputStream(original).getChannel();
+            FileChannel dest = new FileOutputStream(slang).getChannel();
+            dest.transferFrom(src, 0, src.size());
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Stream<SlangWordEntity> searchByWord(String searchKeyWord) {
         Predicate<SlangWordEntity> streamsPredicate = word -> searchKeyWord.equalsIgnoreCase(word.getWord());
 
         writeSearchHistory(1, searchKeyWord);
-        return dic.stream()
-                .filter(streamsPredicate);
+        return dic.stream().filter(streamsPredicate);
     }
 
     public Stream<SlangWordEntity> searchByMeaning(String definition) {
         writeSearchHistory(2, definition);
-        return dic.stream()
-                .filter(x -> x.getMeaning().contains(definition));
+        return dic.stream().filter(x -> x.getMeaning().contains(definition));
     }
 
 
     // endregion
-
 
     // region search history
 
@@ -112,7 +123,7 @@ public class SwDictionary {
     private void writeSearchHistory(Integer searchType, String searchKeyWord) {
         try {
             Writer output = new BufferedWriter(new FileWriter(searchHistoryFilePath, true));
-            output.append(searchType + "`" + searchKeyWord+ '\n');
+            output.append(searchType + "`" + searchKeyWord + '\n');
             output.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -127,8 +138,7 @@ public class SwDictionary {
             while (searchHistoryReader.hasNextLine()) {
                 String line = searchHistoryReader.nextLine();
                 String[] splitedLine = line.split("`");
-                if (splitedLine.length != 2)
-                    continue;
+                if (splitedLine.length != 2) continue;
                 Integer searchType = Integer.valueOf(splitedLine[0]);
                 String searchKeyWord = splitedLine[1];
                 SearchHistoryEntity record = new SearchHistoryEntity(searchType, searchKeyWord);
@@ -140,20 +150,4 @@ public class SwDictionary {
         }
     }
     // endregion
-
-    // region helper
-//    public void removeLine(int id) throws IOException {
-//        File file = new File(this.studentPath);
-//        System.out.println("Read file from path: " + this.studentPath);
-//        System.out.println("File is exist: " + file.exists());
-//        List<String> out = Files.lines(file.toPath())
-//                .filter(line -> !line.split("#", 2)[0].equals(String.valueOf(id)) && !line.isEmpty())
-//                .collect(Collectors.toList());
-//        Files.write(file.toPath(), out, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
-//        studentIdTextField.setText("");
-//        createStudentCollectionTable();
-//        JOptionPane.showMessageDialog(new JButton(), "Remove student successfully");
-//    }
-
-    //endregion
 }
