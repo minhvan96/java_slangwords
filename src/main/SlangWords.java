@@ -98,7 +98,10 @@ public class SlangWords {
                 case 6:
                     System.out.println("Delete a slang word");
                     System.out.print("Enter word: ");
-
+                    Scanner deletingWordScanner = new Scanner(System.in);
+                    String deletingWord = deletingWordScanner.nextLine();
+                    dic.removeRecord(deletingWord);
+                    System.out.println("Word deleted successfully");
                     break;
                 default:
                     break;

@@ -6,6 +6,7 @@ import main.entity.SlangWordEntity;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -75,7 +76,18 @@ public class SwDictionary {
             throw new RuntimeException(e);
         }
     }
-
+    public void removeRecord(String word)  {
+        File file = new File(slangFilePath);
+        List<String> out = null;
+        try {
+            out = Files.lines(file.toPath())
+                    .filter(line -> !line.split("`", 2)[0].equalsIgnoreCase(word) && !line.isEmpty())
+                    .collect(Collectors.toList());
+            Files.write(file.toPath(), out, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     public Stream<SlangWordEntity> searchByWord(String searchKeyWord) {
         Predicate<SlangWordEntity> streamsPredicate = word -> searchKeyWord.equalsIgnoreCase(word.getWord());
 
