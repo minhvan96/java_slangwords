@@ -21,9 +21,7 @@ public class SwDictionary {
     }
 
     public Collection<SlangWordEntity> readDictionary() {
-
-        String slangWordsDic = this.getClass().getResource("resources/slang.txt").getPath();
-        File slangDicFile = new File(slangWordsDic);
+        File slangDicFile = new File(slangFilePath);
         ArrayList<SlangWordEntity> slangDic = new ArrayList<SlangWordEntity>();
         try {
             Scanner studentReader = new Scanner(slangDicFile);
@@ -39,6 +37,15 @@ public class SwDictionary {
             }
             return slangDic;
         } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void insertRecordToDictionary(String word, String meaning){
+        try {
+            Writer output = new BufferedWriter(new FileWriter(slangFilePath, true));
+            output.append(word + "`" + meaning+ '\n');
+            output.close();
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

@@ -71,9 +71,33 @@ public class SlangWords {
                             : "Search by definition: " + x.getSearchKeyWord()));
                     break;
 
+                case 4:
+                    System.out.println("Insert new slang word");
+                    System.out.print("Enter the word: ");
+                    Scanner newWordScanner = new Scanner(System.in);
+                    String newWord = newWordScanner.nextLine();
+
+                    System.out.print("Enter the definition: ");
+                    Scanner newDefinitionScanner = new Scanner(System.in);
+                    String newDefinition = newDefinitionScanner.nextLine();
+                    dic.insertRecordToDictionary(newWord, newDefinition);
+                    System.out.println("New slang word inserted to the dictionary");
+                    break;
+                case 5:
+                    System.out.println("Edit slang word");
+                    System.out.print("Enter word: ");
+                    Scanner editingWordScanner = new Scanner(System.in);
+                    String editingWord = editingWordScanner.nextLine();
+
+                case 6:
+                    System.out.println("Delete a slang word");
+                    System.out.print("Enter word: ");
                 default:
                     break;
             }
+
+            System.out.println("Enter q to quit");
+
 
         }
 
