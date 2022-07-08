@@ -4,8 +4,11 @@ import main.entity.SearchHistoryEntity;
 import main.entity.SlangWordEntity;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Scanner;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -20,6 +23,7 @@ public class SwDictionary {
         dic = (ArrayList<SlangWordEntity>) readDictionary();
     }
 
+    // region dictionary interaction
     public Collection<SlangWordEntity> readDictionary() {
         File slangDicFile = new File(slangFilePath);
         ArrayList<SlangWordEntity> slangDic = new ArrayList<SlangWordEntity>();
@@ -50,6 +54,28 @@ public class SwDictionary {
         }
     }
 
+    public void editRecord(String word, String newDefinition){
+        File file = new File(slangFilePath);
+
+        List<String> fileContent = null;
+        try {
+            fileContent = new ArrayList<>(Files.readAllLines(file.toPath(), StandardCharsets.UTF_8));
+            for (int i = 0; i < fileContent.size(); i++) {
+                String[] splitedLine = fileContent.get(i).split("`");
+                if (splitedLine.length != 2)
+                    continue;
+
+                if (splitedLine[0].equalsIgnoreCase(word)) {
+                    fileContent.set(i, word + "`" + newDefinition);
+                }
+            }
+
+            Files.write(file.toPath(), fileContent, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Stream<SlangWordEntity> searchByWord(String searchKeyWord) {
         Predicate<SlangWordEntity> streamsPredicate = word -> searchKeyWord.equalsIgnoreCase(word.getWord());
 
@@ -63,6 +89,10 @@ public class SwDictionary {
         return dic.stream()
                 .filter(x -> x.getMeaning().contains(definition));
     }
+
+
+    // endregion
+
 
     // region search history
 

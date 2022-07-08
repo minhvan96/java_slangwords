@@ -89,9 +89,17 @@ public class SlangWords {
                     Scanner editingWordScanner = new Scanner(System.in);
                     String editingWord = editingWordScanner.nextLine();
 
+                    System.out.println("Enter new definition");
+                    Scanner editingWordNewDefinitionScanner = new Scanner(System.in);
+                    String editingWordNewDefinition = editingWordNewDefinitionScanner.nextLine();
+                    dic.editRecord(editingWord, editingWordNewDefinition);
+                    System.out.println("Word edited successfully");
+                    break;
                 case 6:
                     System.out.println("Delete a slang word");
                     System.out.print("Enter word: ");
+
+                    break;
                 default:
                     break;
             }
