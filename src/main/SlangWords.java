@@ -1,20 +1,15 @@
 package main;
 
 
-import main.Entity.SlangWord;
+import main.entity.SearchHistoryEntity;
+import main.entity.SlangWordEntity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SlangWords {
 
     public SlangWords() {
-    }
-
-    private void ReadDictionary() {
-
     }
 
     public static void main(String[] args) {
@@ -43,25 +38,38 @@ public class SlangWords {
 
         System.out.print("Select option: ");
         Scanner optionScanner = new Scanner(System.in);
-        while (optionScanner.hasNextLine()){
-            ArrayList<SlangWord> words;
+        while (optionScanner.hasNextLine()) {
+            SlangWordEntity[] words;
             int option = Integer.parseInt(optionScanner.nextLine());
-            switch (option){
+            switch (option) {
                 case 1:
                     System.out.print("Enter word: ");
                     Scanner searchKeyWordScanner = new Scanner(System.in);
                     String searchKeyWord = searchKeyWordScanner.nextLine();
-                    words = (ArrayList<SlangWord>) dic.SearchByWord(searchKeyWord);
+                    words = dic.searchByWord(searchKeyWord).toArray(SlangWordEntity[]::new);
                     System.out.println(String.format("List Meanings"));
-                    words.forEach(word -> System.out.println(word.getMeaning()));
-
+                    for (SlangWordEntity slangWord : words) {
+                        System.out.println(slangWord.getMeaning());
+                    }
+                    break;
                 case 2:
                     System.out.print("Enter definition: ");
                     Scanner searchDefinitionScanner = new Scanner(System.in);
                     String searchDefinition = searchDefinitionScanner.nextLine();
-                    words = (ArrayList<SlangWord>) dic.SearchByMeaning(searchDefinition);
+                    words = dic.searchByMeaning(searchDefinition).toArray(SlangWordEntity[]::new);
                     System.out.println(String.format("List Word"));
-                    words.forEach(word -> System.out.println(word.getMeaning()));
+
+                    for (SlangWordEntity slangWord : words) {
+                        System.out.println(slangWord.getMeaning());
+                    }
+                    break;
+                case 3:
+                    System.out.println("Search history");
+                    ArrayList<SearchHistoryEntity> records = (ArrayList<SearchHistoryEntity>) dic.getSearchHistory();
+                    records.forEach(x -> System.out.println(x.getSearchType() == 1
+                            ? "Search by word with keyword: " + x.getSearchKeyWord()
+                            : "Search by definition: " + x.getSearchKeyWord()));
+                    break;
 
                 default:
                     break;
@@ -69,6 +77,6 @@ public class SlangWords {
 
         }
 
-        dic.read();
+        dic.readDictionary();
     }
 }

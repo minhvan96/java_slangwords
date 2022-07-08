@@ -1,6 +1,6 @@
-package main.Entity;
+package main.entity;
 
-public class SlangWord {
+public class SlangWordEntity {
     private String word;
     private String meaning;
 
@@ -12,7 +12,7 @@ public class SlangWord {
         return meaning;
     }
 
-    public SlangWord(String word, String meaning) {
+    public SlangWordEntity(String word, String meaning) {
         this.word = word;
         this.meaning = meaning;
     }

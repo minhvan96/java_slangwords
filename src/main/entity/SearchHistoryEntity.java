@@ -1,9 +1,9 @@
-package main.Entity;
+package main.entity;
 
-public class SearchHistory {
+public class SearchHistoryEntity {
     private Integer searchType;
     private String searchKeyWord;
-    public SearchHistory(Integer searchType, String searchKeyWord){
+    public SearchHistoryEntity(Integer searchType, String searchKeyWord){
         this.searchType = searchType;
         this.searchKeyWord = searchKeyWord;
     }

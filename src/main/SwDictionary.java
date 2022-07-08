@@ -1,51 +1,110 @@
 package main;
 
-import main.Entity.SlangWord;
+import main.entity.SearchHistoryEntity;
+import main.entity.SlangWordEntity;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Scanner;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SwDictionary {
-    private ArrayList<SlangWord> dic;
+    private final ArrayList<SlangWordEntity> dic;
+    private final String slangFilePath = this.getClass().getResource("resources/slang.txt").getPath();
+    private final String originalSlangFilePath = this.getClass().getResource("resources/original_slang").getPath();
+    private final String searchHistoryFilePath = this.getClass().getResource("resources/search_history").getPath();
     public SwDictionary() {
-        dic = (ArrayList<SlangWord>) read();
+        dic = (ArrayList<SlangWordEntity>) readDictionary();
     }
 
-    public Collection<SlangWord> read() {
-        String slangWordsDic = SlangWord.class.getResource("slang.txt").getPath();
+    public Collection<SlangWordEntity> readDictionary() {
+
+        String slangWordsDic = this.getClass().getResource("resources/slang.txt").getPath();
         File slangDicFile = new File(slangWordsDic);
-        ArrayList<SlangWord> slangDic = new ArrayList<SlangWord>();
+        ArrayList<SlangWordEntity> slangDic = new ArrayList<SlangWordEntity>();
         try {
             Scanner studentReader = new Scanner(slangDicFile);
             while (studentReader.hasNextLine()) {
                 String line = studentReader.nextLine();
                 String[] splitedLine = line.split("`");
-                if(splitedLine.length != 2)
+                if (splitedLine.length != 2)
                     continue;
                 String word = splitedLine[0];
                 String meaning = splitedLine[1];
-                SlangWord slangWord = new SlangWord(word, meaning);
-                slangDic.add(slangWord);
+                SlangWordEntity slangWordEntity = new SlangWordEntity(word, meaning);
+                slangDic.add(slangWordEntity);
             }
             return slangDic;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
-    public Collection<SlangWord> SearchByWord(String searchKeyWord) {
-        Predicate<SlangWord> streamsPredicate = word -> searchKeyWord.equalsIgnoreCase(word.getWord());
 
+    public Stream<SlangWordEntity> searchByWord(String searchKeyWord) {
+        Predicate<SlangWordEntity> streamsPredicate = word -> searchKeyWord.equalsIgnoreCase(word.getWord());
+
+        writeSearchHistory(1, searchKeyWord);
         return dic.stream()
-                .filter(streamsPredicate)
-                .collect(Collectors.toList());
+                .filter(streamsPredicate);
     }
 
-    public Collection<SlangWord> SearchByMeaning(String definition){
-        return dic.stream().filter(x -> x.getMeaning().contains(definition)).toList();
+    public Stream<SlangWordEntity> searchByMeaning(String definition) {
+        writeSearchHistory(2, definition);
+        return dic.stream()
+                .filter(x -> x.getMeaning().contains(definition));
     }
 
-    public Collection
+    // region search history
+
+
+    private void writeSearchHistory(Integer searchType, String searchKeyWord) {
+        try {
+            Writer output = new BufferedWriter(new FileWriter(searchHistoryFilePath, true));
+            output.append(searchType + "`" + searchKeyWord+ '\n');
+            output.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Collection<SearchHistoryEntity> getSearchHistory() {
+        File searchHistoryFile = new File(searchHistoryFilePath);
+        ArrayList<SearchHistoryEntity> records = new ArrayList<SearchHistoryEntity>();
+        try {
+            Scanner searchHistoryReader = new Scanner(searchHistoryFile);
+            while (searchHistoryReader.hasNextLine()) {
+                String line = searchHistoryReader.nextLine();
+                String[] splitedLine = line.split("`");
+                if (splitedLine.length != 2)
+                    continue;
+                Integer searchType = Integer.valueOf(splitedLine[0]);
+                String searchKeyWord = splitedLine[1];
+                SearchHistoryEntity record = new SearchHistoryEntity(searchType, searchKeyWord);
+                records.add(record);
+            }
+            return records;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    // endregion
+
+    // region helper
+//    public void removeLine(int id) throws IOException {
+//        File file = new File(this.studentPath);
+//        System.out.println("Read file from path: " + this.studentPath);
+//        System.out.println("File is exist: " + file.exists());
+//        List<String> out = Files.lines(file.toPath())
+//                .filter(line -> !line.split("#", 2)[0].equals(String.valueOf(id)) && !line.isEmpty())
+//                .collect(Collectors.toList());
+//        Files.write(file.toPath(), out, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
+//        studentIdTextField.setText("");
+//        createStudentCollectionTable();
+//        JOptionPane.showMessageDialog(new JButton(), "Remove student successfully");
+//    }
+
+    //endregion
 }
