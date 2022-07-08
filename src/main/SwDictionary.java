@@ -8,10 +8,7 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -47,6 +44,9 @@ public class SwDictionary {
         }
     }
 
+    public Optional<SlangWordEntity> getRandomSlangWord(){
+        return getRandom(readDictionary());
+    }
     public void insertRecordToDictionary(String word, String meaning) {
         try {
             Writer output = new BufferedWriter(new FileWriter(slangFilePath, true));
@@ -150,4 +150,11 @@ public class SwDictionary {
         }
     }
     // endregion
+
+    public static <E> Optional<E> getRandom (Collection<E> e) {
+
+        return e.stream()
+                .skip((int) (e.size() * Math.random()))
+                .findFirst();
+    }
 }

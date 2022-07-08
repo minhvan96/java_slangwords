@@ -4,10 +4,7 @@ package main;
 import main.entity.SearchHistoryEntity;
 import main.entity.SlangWordEntity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class SlangWords {
 
@@ -126,6 +123,11 @@ public class SlangWords {
 
                 case 8:
                 {
+                    System.out.println("Random slang word of the day");
+                    Optional<SlangWordEntity> randomSlangWord = dic.getRandomSlangWord();
+                    if(randomSlangWord != null){
+                        System.out.println(randomSlangWord.get().getWord() + "has meaning: " + randomSlangWord.get().getMeaning());
+                    }
                     break;
                 }
 
