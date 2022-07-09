@@ -2,7 +2,7 @@ package main;
 
 
 import main.entity.SearchHistoryEntity;
-import main.entity.SlangGuessDefinitionPuzzle;
+import main.entity.SlangWordPuzzleEntity;
 import main.entity.SlangWordEntity;
 
 import java.util.*;
@@ -131,16 +131,16 @@ public class SlangWords {
 
                 case 9: {
                     System.out.println("Guess definition puzzle");
-                    SlangGuessDefinitionPuzzle guessDefinitionPuzzle = dic.getSlangGuessDefinitionPuzzle();
+                    SlangWordPuzzleEntity slangWordPuzzle = dic.getGuessDefinitionPuzzle();
 
-                    System.out.println("What is the definition of the word: " + guessDefinitionPuzzle.answer.getWord());
-                    guessDefinitionPuzzle.printPuzzle();
+                    System.out.println("What is the definition of the word: " + slangWordPuzzle.answer.getWord());
+                    slangWordPuzzle.getGuessDefinitionPuzzle();
 
                     System.out.print("Enter your answer (A, B, C, D): ");
                     Scanner guessDefinitionPuzzleAnswerScanner = new Scanner(System.in);
                     String guessDefinitionPuzzleAnswer = guessDefinitionPuzzleAnswerScanner.nextLine();
 
-                    if (guessDefinitionPuzzleAnswer.equalsIgnoreCase(guessDefinitionPuzzle.getAnswerByWord()))
+                    if (guessDefinitionPuzzleAnswer.equalsIgnoreCase(slangWordPuzzle.getAnswerByWord()))
                         System.out.println("WIN");
                     else {
                         System.out.println("LOSE!");
@@ -150,6 +150,22 @@ public class SlangWords {
                 }
 
                 case 10: {
+                    System.out.println("Guess word given definition puzzle");
+                    SlangWordPuzzleEntity slangWordPuzzle = dic.getGuessWordGivenDefinitionPuzzle();
+
+                    System.out.println("What is the word match the definition: " + slangWordPuzzle.answer.getMeaning());
+                    slangWordPuzzle.getGuessWordGivenDefinitionPuzzle();
+
+                    System.out.print("Enter your answer (A, B, C, D): ");
+                    Scanner guessWordGivenDefinitionAnswerScanner = new Scanner(System.in);
+                    String guessWordGivenDefinitionAnswer = guessWordGivenDefinitionAnswerScanner.nextLine();
+
+                    if (guessWordGivenDefinitionAnswer.equalsIgnoreCase(slangWordPuzzle.getAnswerByWord()))
+                        System.out.println("WIN");
+                    else {
+                        System.out.println("LOSE!");
+                    }
+                    System.out.println();
                     break;
                 }
 

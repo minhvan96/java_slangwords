@@ -1,7 +1,7 @@
 package main;
 
 import main.entity.SearchHistoryEntity;
-import main.entity.SlangGuessDefinitionPuzzle;
+import main.entity.SlangWordPuzzleEntity;
 import main.entity.SlangWordEntity;
 
 import java.io.*;
@@ -115,8 +115,8 @@ public class SwDictionary {
         return dic.stream().filter(x -> x.getMeaning().contains(definition));
     }
 
-    public SlangGuessDefinitionPuzzle getSlangGuessDefinitionPuzzle(){
-        SlangGuessDefinitionPuzzle puzzle = new SlangGuessDefinitionPuzzle();
+    public SlangWordPuzzleEntity getGuessDefinitionPuzzle(){
+        SlangWordPuzzleEntity puzzle = new SlangWordPuzzleEntity();
         ArrayList<SlangWordEntity> dictionary = (ArrayList<SlangWordEntity>) readDictionary();
 
         Optional<SlangWordEntity> answer = getRandom(dictionary);
@@ -125,6 +125,19 @@ public class SwDictionary {
             Optional<SlangWordEntity> wrongAnswer = getRandom(dictionary);
             puzzle.addWrongAnswer(wrongAnswer.get().getMeaning());
         }
+        return puzzle;
+    }
+    public SlangWordPuzzleEntity getGuessWordGivenDefinitionPuzzle(){
+        SlangWordPuzzleEntity puzzle = new SlangWordPuzzleEntity();
+        ArrayList<SlangWordEntity> dictionary = (ArrayList<SlangWordEntity>) readDictionary();
+
+        Optional<SlangWordEntity> answer = getRandom(dictionary);
+        puzzle.setAnswer(answer.get());
+        for(int i = 0; i < 3; i++){
+            Optional<SlangWordEntity> wrongAnswer = getRandom(dictionary);
+            puzzle.addWrongAnswer((wrongAnswer.get().getWord()));
+        }
+
         return puzzle;
     }
     // endregion
