@@ -8,6 +8,8 @@ import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.function.Predicate;
@@ -19,15 +21,52 @@ public class SwDictionary {
     private final String slangFilePath = getClass().getResource("slang.txt").getPath();
     private final InputStream slangFileInputStream = getClass().getResourceAsStream("slang.txt");
     private final String originalSlangFilePath = getClass().getResource("original_slang").getPath();
+    private final InputStream originalSlangFileInputStream = getClass().getResourceAsStream("original_slang");
     private final String searchHistoryFilePath = getClass().getResource("search_history").getPath();
+    private final InputStream searchHistoryFileInputStream = getClass().getResourceAsStream("search_history");
 
     public SwDictionary() {
+        init();
         System.out.println(slangFilePath);
         System.out.println(originalSlangFilePath);
         System.out.println(searchHistoryFilePath);
         dic = (ArrayList<SlangWordEntity>) readDictionary(slangFileInputStream);
     }
+    public void init(){
+        try {
+            File langTxt = new File("slang.txt");
+            langTxt.createNewFile(); // if file already exists will do nothing
+            FileOutputStream oSlangFile = new FileOutputStream(langTxt, false);
 
+            File searchHistoryFile = new File("search_history");
+            searchHistoryFile.createNewFile(); // if file already exists will do nothing
+            FileOutputStream oSearchHistory = new FileOutputStream(searchHistoryFile, false);
+
+            File originalSlangFile = new File("original_slang");
+            originalSlangFile.createNewFile(); // if file already exists will do nothing
+            FileOutputStream oOriginalSlang = new FileOutputStream(originalSlangFile, false);
+
+            transferFile(slangFileInputStream, oSlangFile.getChannel());
+            transferFile(originalSlangFileInputStream, oOriginalSlang.getChannel());
+            transferFile(searchHistoryFileInputStream, oSearchHistory.getChannel());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private void transferFile(InputStream srcInputStream, FileChannel dest){
+
+        Path temp = null;
+        try {
+            temp = Files.createTempFile("resource-", ".ext");
+            Files.copy(srcInputStream, temp, StandardCopyOption.REPLACE_EXISTING);
+            FileInputStream input = new FileInputStream(temp.toFile());
+            FileChannel src = input.getChannel();
+            dest.transferFrom(src, 0, src.size());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
     // region dictionary interaction
     public Collection<SlangWordEntity> readDictionary() {
         File slangDicFile = new File(slangFilePath);
@@ -124,6 +163,7 @@ public class SwDictionary {
             throw new RuntimeException(e);
         }
     }
+
 
     public Stream<SlangWordEntity> searchByWord(String searchKeyWord) {
         Predicate<SlangWordEntity> streamsPredicate = word -> searchKeyWord.equalsIgnoreCase(word.getWord());

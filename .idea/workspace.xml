@@ -7,14 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3bc34ce6-5d9e-4ad9-a811-b8879751fab1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/SlangWords_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/original_slang" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/search_history" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/slang.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/test" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/SlangWords.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/SlangWords.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/SwDictionary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/SwDictionary.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -49,7 +42,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "D:/KHTN/Java/Practices/SlangWords/SlangWords/src/main",
+    "last_opened_file_path": "F:/temt",
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Artifacts",
     "project.structure.proportion": "0.15",
@@ -115,6 +108,15 @@
     </option>
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/SwDictionary.java</url>
+          <line>36</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression="Main.class.getResource(&quot;/slang.txt&quot;).getPath()" language="JAVA" />
@@ -122,6 +124,8 @@
         <watch expression="Main.class.getResource(&quot;tét&quot;).getPath()" language="JAVA" />
         <watch expression="Main.class.getResource(&quot;test&quot;).getPath()" language="JAVA" />
         <watch expression="Main.class" language="JAVA" />
+        <watch expression="classLoader.getResource(&quot;slang.txt&quot;)" language="JAVA" />
+        <watch expression="classLoader.getResource(&quot;original_slang&quot;)" language="JAVA" />
       </configuration>
     </watches-manager>
   </component>
