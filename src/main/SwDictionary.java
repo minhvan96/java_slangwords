@@ -16,19 +16,24 @@ import java.util.stream.Stream;
 
 public class SwDictionary {
     private final ArrayList<SlangWordEntity> dic;
-    private final String slangFilePath = this.getClass().getResource("resources/slang.txt").getPath();
-    private final String originalSlangFilePath = this.getClass().getResource("resources/original_slang").getPath();
-    private final String searchHistoryFilePath = this.getClass().getResource("resources/search_history").getPath();
+    private final String slangFilePath = getClass().getResource("slang.txt").getPath();
+    private final InputStream slangFileInputStream = getClass().getResourceAsStream("slang.txt");
+    private final String originalSlangFilePath = getClass().getResource("original_slang").getPath();
+    private final String searchHistoryFilePath = getClass().getResource("search_history").getPath();
 
     public SwDictionary() {
-        dic = (ArrayList<SlangWordEntity>) readDictionary();
+        System.out.println(slangFilePath);
+        System.out.println(originalSlangFilePath);
+        System.out.println(searchHistoryFilePath);
+        dic = (ArrayList<SlangWordEntity>) readDictionary(slangFileInputStream);
     }
 
     // region dictionary interaction
     public Collection<SlangWordEntity> readDictionary() {
         File slangDicFile = new File(slangFilePath);
-        ArrayList<SlangWordEntity> slangDic = new ArrayList<SlangWordEntity>();
+        ArrayList<SlangWordEntity> slangDic = new ArrayList();
         try {
+            System.out.println("Try to read dictionary");
             Scanner studentReader = new Scanner(slangDicFile);
             while (studentReader.hasNextLine()) {
                 String line = studentReader.nextLine();
@@ -43,6 +48,23 @@ public class SwDictionary {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+    private Collection<SlangWordEntity> readDictionary(InputStream inputStream) {
+        ArrayList<SlangWordEntity> slangDic = new ArrayList();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] splitedLine = line.split("`");
+                if (splitedLine.length != 2) continue;
+                String word = splitedLine[0];
+                String meaning = splitedLine[1];
+                SlangWordEntity slangWordEntity = new SlangWordEntity(word, meaning);
+                slangDic.add(slangWordEntity);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return slangDic;
     }
 
     public Optional<SlangWordEntity> getRandomSlangWord(){
@@ -117,7 +139,7 @@ public class SwDictionary {
 
     public SlangWordPuzzleEntity getGuessDefinitionPuzzle(){
         SlangWordPuzzleEntity puzzle = new SlangWordPuzzleEntity();
-        ArrayList<SlangWordEntity> dictionary = (ArrayList<SlangWordEntity>) readDictionary();
+        ArrayList<SlangWordEntity> dictionary = (ArrayList<SlangWordEntity>) readDictionary(slangFileInputStream);
 
         Optional<SlangWordEntity> answer = getRandom(dictionary);
         puzzle.setAnswer(answer.get());
@@ -129,7 +151,7 @@ public class SwDictionary {
     }
     public SlangWordPuzzleEntity getGuessWordGivenDefinitionPuzzle(){
         SlangWordPuzzleEntity puzzle = new SlangWordPuzzleEntity();
-        ArrayList<SlangWordEntity> dictionary = (ArrayList<SlangWordEntity>) readDictionary();
+        ArrayList<SlangWordEntity> dictionary = (ArrayList<SlangWordEntity>) readDictionary(slangFileInputStream);
 
         Optional<SlangWordEntity> answer = getRandom(dictionary);
         puzzle.setAnswer(answer.get());
@@ -147,6 +169,7 @@ public class SwDictionary {
 
     private void writeSearchHistory(Integer searchType, String searchKeyWord) {
         try {
+            System.out.println("History file path: " + searchHistoryFilePath);
             Writer output = new BufferedWriter(new FileWriter(searchHistoryFilePath, true));
             output.append(searchType + "`" + searchKeyWord + '\n');
             output.close();

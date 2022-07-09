@@ -5,11 +5,15 @@ import main.entity.SearchHistoryEntity;
 import main.entity.SlangWordPuzzleEntity;
 import main.entity.SlangWordEntity;
 
+import java.io.InputStream;
 import java.util.*;
 
 public class SlangWords {
-
+    private final InputStream slangFilePath = getClass().getResourceAsStream("test");
+    private final InputStream originalSlangFilePath = getClass().getResourceAsStream("test");
+    private final InputStream searchHistoryFilePath = getClass().getResourceAsStream("test");
     public SlangWords() {
+
     }
 
     public static void main(String[] args) {
@@ -29,6 +33,7 @@ public class SlangWords {
         menu.put(10, "Slang puzzle 2");
         // endregion
 
+        System.out.println("Create dictionary");
         SwDictionary dic = new SwDictionary();
 
         System.out.println("SLANG WORDS APP MENU");
