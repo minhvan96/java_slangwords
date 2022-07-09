@@ -2,6 +2,7 @@ package main;
 
 
 import main.entity.SearchHistoryEntity;
+import main.entity.SlangGuessDefinitionPuzzle;
 import main.entity.SlangWordEntity;
 
 import java.util.*;
@@ -101,8 +102,7 @@ public class SlangWords {
                     break;
                 }
 
-                case 6:
-                {
+                case 6: {
                     System.out.println("Delete a slang word");
                     System.out.print("Enter word: ");
                     Scanner deletingWordScanner = new Scanner(System.in);
@@ -112,8 +112,7 @@ public class SlangWords {
                     break;
                 }
 
-                case 7:
-                {
+                case 7: {
                     System.out.println("Reset dictionary");
                     dic.reset();
 
@@ -121,23 +120,36 @@ public class SlangWords {
                     break;
                 }
 
-                case 8:
-                {
+                case 8: {
                     System.out.println("Random slang word of the day");
                     Optional<SlangWordEntity> randomSlangWord = dic.getRandomSlangWord();
-                    if(randomSlangWord != null){
+                    if (randomSlangWord != null) {
                         System.out.println(randomSlangWord.get().getWord() + "has meaning: " + randomSlangWord.get().getMeaning());
                     }
                     break;
                 }
 
-                case 9:
-                {
+                case 9: {
+                    System.out.println("Guess definition puzzle");
+                    SlangGuessDefinitionPuzzle guessDefinitionPuzzle = dic.getSlangGuessDefinitionPuzzle();
+
+                    System.out.println("What is the definition of the word: " + guessDefinitionPuzzle.answer.getWord());
+                    guessDefinitionPuzzle.printPuzzle();
+
+                    System.out.print("Enter your answer (A, B, C, D): ");
+                    Scanner guessDefinitionPuzzleAnswerScanner = new Scanner(System.in);
+                    String guessDefinitionPuzzleAnswer = guessDefinitionPuzzleAnswerScanner.nextLine();
+
+                    if (guessDefinitionPuzzleAnswer.equalsIgnoreCase(guessDefinitionPuzzle.getAnswerByWord()))
+                        System.out.println("WIN");
+                    else {
+                        System.out.println("LOSE!");
+                    }
+                    System.out.println();
                     break;
                 }
 
-                case 10:
-                {
+                case 10: {
                     break;
                 }
 
@@ -146,12 +158,13 @@ public class SlangWords {
                     break;
             }
 
-            System.out.println("Enter q to quit");
+            System.out.println("Enter q to quit or enter any other key to continue");
             Scanner quitScanner = new Scanner(System.in);
             if (optionScanner.nextLine().equalsIgnoreCase("q")) {
                 System.out.println("Good bye");
                 return;
             }
+            System.out.print("Select option: ");
 
         }
 
