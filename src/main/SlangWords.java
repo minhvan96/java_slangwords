@@ -51,6 +51,7 @@ public class SlangWords {
                     for (SlangWordEntity slangWord : words) {
                         System.out.println(slangWord.getMeaning());
                     }
+                    System.out.println("----------------------------------------------");
                     break;
                 }
 
@@ -64,6 +65,7 @@ public class SlangWords {
                     for (SlangWordEntity slangWord : words) {
                         System.out.println(slangWord.getMeaning());
                     }
+                    System.out.println("----------------------------------------------");
                     break;
                 }
 
@@ -71,6 +73,7 @@ public class SlangWords {
                     System.out.println("Search history");
                     ArrayList<SearchHistoryEntity> records = (ArrayList<SearchHistoryEntity>) dic.getSearchHistory();
                     records.forEach(x -> System.out.println(x.getSearchType() == 1 ? "Search by word with keyword: " + x.getSearchKeyWord() : "Search by definition: " + x.getSearchKeyWord()));
+                    System.out.println("----------------------------------------------");
                     break;
                 }
 
@@ -85,6 +88,7 @@ public class SlangWords {
                     String newDefinition = newDefinitionScanner.nextLine();
                     dic.insertRecordToDictionary(newWord, newDefinition);
                     System.out.println("New slang word inserted to the dictionary");
+                    System.out.println("----------------------------------------------");
                     break;
                 }
 
@@ -99,6 +103,7 @@ public class SlangWords {
                     String editingWordNewDefinition = editingWordNewDefinitionScanner.nextLine();
                     dic.editRecord(editingWord, editingWordNewDefinition);
                     System.out.println("Word edited successfully");
+                    System.out.println("----------------------------------------------");
                     break;
                 }
 
@@ -109,6 +114,7 @@ public class SlangWords {
                     String deletingWord = deletingWordScanner.nextLine();
                     dic.removeRecord(deletingWord);
                     System.out.println("Word deleted successfully");
+                    System.out.println("----------------------------------------------");
                     break;
                 }
 
@@ -117,6 +123,7 @@ public class SlangWords {
                     dic.reset();
 
                     System.out.println("Dictionary reset successfully");
+                    System.out.println("----------------------------------------------");
                     break;
                 }
 
@@ -124,8 +131,9 @@ public class SlangWords {
                     System.out.println("Random slang word of the day");
                     Optional<SlangWordEntity> randomSlangWord = dic.getRandomSlangWord();
                     if (randomSlangWord != null) {
-                        System.out.println(randomSlangWord.get().getWord() + "has meaning: " + randomSlangWord.get().getMeaning());
+                        System.out.println(randomSlangWord.get().getWord() + " has meaning: " + randomSlangWord.get().getMeaning());
                     }
+                    System.out.println("----------------------------------------------");
                     break;
                 }
 
@@ -146,6 +154,7 @@ public class SlangWords {
                         System.out.println("LOSE!");
                     }
                     System.out.println();
+                    System.out.println("----------------------------------------------");
                     break;
                 }
 
@@ -166,9 +175,9 @@ public class SlangWords {
                         System.out.println("LOSE!");
                     }
                     System.out.println();
+                    System.out.println("----------------------------------------------");
                     break;
                 }
-
 
                 default:
                     break;
@@ -180,6 +189,8 @@ public class SlangWords {
                 System.out.println("Good bye");
                 return;
             }
+            System.out.println("----------------------------------------------");
+            menu.forEach((k, v) -> System.out.println(k + ": " + v));
             System.out.print("Select option: ");
 
         }

@@ -15,8 +15,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SwDictionary {
-    private final ArrayList<SlangWordEntity> dic;
+    private ArrayList<SlangWordEntity> dic;
     private final String slangFilePath = this.getClass().getResource("resources/slang.txt").getPath();
+    private final InputStream slangFileInputStream = this.getClass().getResourceAsStream("resources/slang.txt");
     private final String originalSlangFilePath = this.getClass().getResource("resources/original_slang").getPath();
     private final String searchHistoryFilePath = this.getClass().getResource("resources/search_history").getPath();
 
@@ -25,13 +26,12 @@ public class SwDictionary {
     }
 
     // region dictionary interaction
+
     public Collection<SlangWordEntity> readDictionary() {
-        File slangDicFile = new File(slangFilePath);
-        ArrayList<SlangWordEntity> slangDic = new ArrayList<SlangWordEntity>();
-        try {
-            Scanner studentReader = new Scanner(slangDicFile);
-            while (studentReader.hasNextLine()) {
-                String line = studentReader.nextLine();
+        ArrayList<SlangWordEntity> slangDic = new ArrayList();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("resources/slang.txt")))) {
+            String line;
+            while ((line = br.readLine()) != null) {
                 String[] splitedLine = line.split("`");
                 if (splitedLine.length != 2) continue;
                 String word = splitedLine[0];
@@ -39,10 +39,10 @@ public class SwDictionary {
                 SlangWordEntity slangWordEntity = new SlangWordEntity(word, meaning);
                 slangDic.add(slangWordEntity);
             }
-            return slangDic;
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return slangDic;
     }
 
     public Optional<SlangWordEntity> getRandomSlangWord(){
@@ -53,6 +53,7 @@ public class SwDictionary {
             Writer output = new BufferedWriter(new FileWriter(slangFilePath, true));
             output.append(word + "`" + meaning + '\n');
             output.close();
+            dic = (ArrayList<SlangWordEntity>) readDictionary();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -74,6 +75,7 @@ public class SwDictionary {
             }
 
             Files.write(file.toPath(), fileContent, StandardCharsets.UTF_8);
+            dic = (ArrayList<SlangWordEntity>) readDictionary();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -85,6 +87,7 @@ public class SwDictionary {
         try {
             out = Files.lines(file.toPath()).filter(line -> !line.split("`", 2)[0].equalsIgnoreCase(word) && !line.isEmpty()).collect(Collectors.toList());
             Files.write(file.toPath(), out, StandardCharsets.UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
+            dic = (ArrayList<SlangWordEntity>) readDictionary();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -96,6 +99,7 @@ public class SwDictionary {
             FileChannel src = new FileInputStream(original).getChannel();
             FileChannel dest = new FileOutputStream(slang).getChannel();
             dest.transferFrom(src, 0, src.size());
+            dic = (ArrayList<SlangWordEntity>) readDictionary();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -154,6 +158,15 @@ public class SwDictionary {
             throw new RuntimeException(e);
         }
     }
+//    private void writeSearchHistory(Integer searchType, String searchKeyWord) {
+//        try (BufferedWriter bufferedWriter = Files.newBufferedWriter(Paths.get(getClass().getResource("resources/search_history").toURI()))) {
+//            bufferedWriter.append(searchType + "`" + searchKeyWord + '\n');
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        } catch (URISyntaxException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     public Collection<SearchHistoryEntity> getSearchHistory() {
         File searchHistoryFile = new File(searchHistoryFilePath);

@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SlangWords:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SlangWords_jar</output-path>
+    <root id="archive" name="SlangWords.jar">
+      <element id="module-output" name="SlangWords" />
+      <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources" />
+    </root>
+  </artifact>
+</component>
